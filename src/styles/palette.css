@@ -1,0 +1,141 @@
+/*
+ * The one shared palette for every multivitamin.
+ *
+ * Layering rule: Shiki owns token text color (inline `color: var(--shiki-*)` in the
+ * build's HTML). The highlight layer only touches line background (translucent tints),
+ * a left bar for primary via box-shadow, an underline for `.mv-focus`, and opacity for
+ * dimmed lines, so syntax colors stay readable under every highlight.
+ * Highlight colors are keyed to role, never to API.
+ */
+
+:root,
+:root[data-theme="light"] {
+  --shiki-foreground: #1f2328;
+  --shiki-background: #ffffff;
+  --shiki-token-constant: #0550ae;
+  --shiki-token-string: #0a3069;
+  --shiki-token-string-expression: #116329;
+  --shiki-token-comment: #6e7781;
+  --shiki-token-keyword: #cf222e;
+  --shiki-token-parameter: #953800;
+  --shiki-token-function: #8250df;
+  --shiki-token-punctuation: #1f2328;
+  --shiki-token-link: #0969da;
+
+  --mv-primary-bg: rgb(234 179 8 / 0.16);
+  --mv-primary-bar: #c99400;
+  --mv-setup-bg: rgb(56 139 253 / 0.1);
+  --mv-result-bg: rgb(26 160 80 / 0.12);
+  --mv-focus-underline: #c99400;
+  --mv-dim-opacity: 0.55;
+  --mv-gutter: #8c959f;
+}
+
+:root[data-theme="dark"] {
+  --shiki-foreground: #e6edf3;
+  --shiki-background: #0d1117;
+  --shiki-token-constant: #79c0ff;
+  --shiki-token-string: #a5d6ff;
+  --shiki-token-string-expression: #7ee787;
+  --shiki-token-comment: #8b949e;
+  --shiki-token-keyword: #ff7b72;
+  --shiki-token-parameter: #ffa657;
+  --shiki-token-function: #d2a8ff;
+  --shiki-token-punctuation: #e6edf3;
+  --shiki-token-link: #58a6ff;
+
+  --mv-primary-bg: rgb(234 179 8 / 0.14);
+  --mv-primary-bar: #e3b341;
+  --mv-setup-bg: rgb(56 139 253 / 0.15);
+  --mv-result-bg: rgb(46 160 67 / 0.17);
+  --mv-focus-underline: #e3b341;
+  --mv-dim-opacity: 0.55;
+  --mv-gutter: #6e7681;
+}
+
+.mv-code {
+  --mv-line-height: 20px;
+  --mv-transition: 200ms ease;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: var(--mv-line-height);
+}
+
+.mv-code pre.shiki {
+  margin: 0;
+  padding: 0.75rem 0;
+  min-height: 100%;
+  outline: none;
+}
+
+/* Flex drops the whitespace-only "\n" text nodes Shiki puts between lines. */
+.mv-code pre.shiki > code {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  min-width: 100%;
+}
+
+.mv-code .line {
+  display: block;
+  min-height: var(--mv-line-height);
+  padding-inline: 0 1.5rem;
+  white-space: pre;
+  transition:
+    background-color var(--mv-transition),
+    box-shadow var(--mv-transition),
+    opacity var(--mv-transition);
+}
+
+.mv-code .line::before {
+  content: attr(data-line);
+  display: inline-block;
+  width: 4.5ch;
+  margin-right: 2ch;
+  text-align: right;
+  color: var(--mv-gutter);
+  user-select: none;
+}
+
+.mv-code .line[data-role="primary"] {
+  background-color: var(--mv-primary-bg);
+  box-shadow: inset 3px 0 0 var(--mv-primary-bar);
+}
+.mv-code .line[data-role="setup"] {
+  background-color: var(--mv-setup-bg);
+}
+.mv-code .line[data-role="result"] {
+  background-color: var(--mv-result-bg);
+}
+.mv-code .line[data-dimmed] {
+  opacity: var(--mv-dim-opacity);
+}
+
+.mv-code .mv-focus {
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--mv-transition);
+}
+.mv-code .mv-focus[data-role] {
+  text-decoration-color: var(--mv-focus-underline);
+}
+
+/* Role swatches used outside the code panel (step list, legend). */
+.mv-swatch[data-role="primary"] {
+  background-color: var(--mv-primary-bg);
+  box-shadow: inset 3px 0 0 var(--mv-primary-bar);
+}
+.mv-swatch[data-role="setup"] {
+  background-color: var(--mv-setup-bg);
+}
+.mv-swatch[data-role="result"] {
+  background-color: var(--mv-result-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mv-code {
+    --mv-transition: 0ms;
+  }
+}

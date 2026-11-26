@@ -1,0 +1,47 @@
+@layer ui-sdk;
+
+@import "tailwindcss";
+@import "./styles/palette.css";
+
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+  --app-bg: #f6f8fa;
+  --app-surface: #ffffff;
+  --app-fg: #1f2328;
+  --app-muted: #656d76;
+  --app-border: #d0d7de;
+  --app-hover: rgb(175 184 193 / 0.2);
+  --app-selected: rgb(84 174 255 / 0.18);
+  --app-ring: #0969da;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --app-bg: #010409;
+  --app-surface: #0d1117;
+  --app-fg: #e6edf3;
+  --app-muted: #8d96a0;
+  --app-border: #30363d;
+  --app-hover: rgb(177 186 196 / 0.12);
+  --app-selected: rgb(56 139 253 / 0.18);
+  --app-ring: #2f81f7;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--app-fg);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
