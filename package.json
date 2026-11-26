@@ -1,0 +1,37 @@
+{
+  "name": "multivitamin-web",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Shared web client that renders any multivitamin catalog with source highlighting",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MICharisma/multivitamin-web.git"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.108.4",
+    "@tanstack/react-virtual": "^3.14.28",
+    "@ui-sdk/core": "0.1.0-beta.17",
+    "@ui-sdk/react": "0.1.0-beta.17",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router": "^7.18.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/react": "^19.3.3",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.4.0",
+    "vitest": "^5.1.2"
+  }
+}
