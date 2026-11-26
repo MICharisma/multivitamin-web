@@ -26,7 +26,7 @@ export function CommandList(props: ComponentProps<typeof SdkCommandList>) {
 }
 
 export function CommandEmpty(props: ComponentProps<typeof SdkCommandEmpty>) {
-  return <SdkCommandEmpty className="p-6 text-center text-sm text-(--app-muted)" {...props} />
+  return <SdkCommandEmpty className="text-center data-empty:p-6 text-sm text-(--app-muted)" {...props} />
 }
 
 export function CommandGroupLabel(props: ComponentProps<typeof SdkCommandGroupLabel>) {

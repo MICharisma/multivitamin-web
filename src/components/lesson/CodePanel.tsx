@@ -9,10 +9,11 @@ const LINE_HEIGHT = 20
 interface CodePanelProps {
   /** Trusted Shiki HTML from our own build. */
   html: string
-  /** Roles for the step being shown, or `null` to render plain code. */
+  /**
+   * Roles for the step being shown, or `null` to render plain code. A new map (new step, or
+   * highlights just loaded) also scrolls the step's primary region into view.
+   */
   roles: RoleMap | null
-  /** Changes whenever the shown step changes; triggers scrolling to its primary region. */
-  stepKey: string
   label: string
 }
 
@@ -28,7 +29,7 @@ const HtmlMount = memo(function HtmlMount({ html }: { html: string }) {
   return <div dangerouslySetInnerHTML={{ __html: html }} />
 })
 
-function StaticCode({ html, roles, stepKey, label }: CodePanelProps) {
+function StaticCode({ html, roles, label }: CodePanelProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
@@ -48,7 +49,7 @@ function StaticCode({ html, roles, stepKey, label }: CodePanelProps) {
       top: container.scrollTop + (top - view.top) - view.height / 3,
       behavior: prefersReducedMotion() ? "auto" : "smooth",
     })
-  }, [html, stepKey])
+  }, [html, roles])
 
   return (
     <div
@@ -81,7 +82,7 @@ function parseLines(html: string): ParsedLine[] {
 }
 
 /** Long-file path: same markup and attributes per line, but only visible rows are mounted. */
-function VirtualCode({ html, roles, stepKey, label }: CodePanelProps) {
+function VirtualCode({ html, roles, label }: CodePanelProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const lines = useMemo(() => parseLines(html), [html])
   const widthCh = useMemo(() => Math.max(0, ...lines.map((l) => l.length)) + 10, [lines])
@@ -99,18 +100,19 @@ function VirtualCode({ html, roles, stepKey, label }: CodePanelProps) {
   })
 
   useEffect(() => {
-    if (!roles) return
+    const container = scrollRef.current
+    if (!roles || !container) return
     const index = lines.findIndex((l) => roleForRegions(l.region, roles) === "primary")
     if (index === -1) return
-    const visible = virtualizer.getVirtualItems()
-    const first = visible[0]?.index ?? 0
-    const last = visible.at(-1)?.index ?? 0
-    if (index > first + 2 && index < last - 2) return
-    virtualizer.scrollToIndex(index, {
-      align: "center",
+    // Rows have a fixed height, so the target's offset is known without mounting it.
+    const top = index * LINE_HEIGHT
+    const { scrollTop, clientHeight } = container
+    if (top >= scrollTop && top + LINE_HEIGHT <= scrollTop + clientHeight) return
+    container.scrollTo({
+      top: top - clientHeight / 3,
       behavior: prefersReducedMotion() ? "auto" : "smooth",
     })
-  }, [lines, stepKey])
+  }, [lines, roles])
 
   return (
     <div

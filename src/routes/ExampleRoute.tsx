@@ -136,7 +136,6 @@ function ExampleView({ feature, example }: { feature: FeatureEntry; example: Exa
             <CodePanel
               html={html.data}
               roles={roles}
-              stepKey={`${shown}`}
               label={`Source of ${sourceName}`}
             />
           )}
